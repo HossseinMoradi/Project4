@@ -237,14 +237,14 @@ def Signal():
 
 
 def ChangeSpeed():
-    diffSpeed = 2 # keep speed a little smaller so that vehicle arrive shortly before the signal head.
-    GetVissimDataVehicles() # read vehicle attributes from PTV Vissim to global variable "vehsAttributes"
+
+    GetVissimDataVehicles() 
     MinSpeed=5
     MaxSpeed=76
 
-    if len(vehsAttributes) > 1: # if there are any vehicles in the network
-        for vehAttributes in vehsAttributes: # loop over all vehicles in the network
-            if vehAttributes[vehsAttNames['VehType\\No']] in vehTypesEquipped: # check if vehicle is able to receive signal information
+    if len(vehsAttributes) > 1: 
+        for vehAttributes in vehsAttributes:
+            if vehAttributes[vehsAttNames['VehType\\No']] in vehTypesEquipped: 
                 # set easier variables of the current vehicle:
                 DesSpeed = vehAttributes[vehsAttNames['DesSpeed']]
                 Speed = vehAttributes[vehsAttNames['Speed']]
@@ -260,10 +260,6 @@ def ChangeSpeed():
                     if Vissim.Net.SignalControllers.ItemByKey(1).SGs.ItemByKey(1).AttValue('TimeUntilNextGreen')!=-1:
                         vehAttributes[vehsAttNames['DesSpeed']] = MinSpeed
                         
-
-        #----------------------------------------------------------------------------
-        #  After iterating though all vehicles, update the speeds in PTV Vissim     |
-        #----------------------------------------------------------------------------
         vehicleNumDesiredSpeeds = [[x[vehsAttNames['DesSpeed']], x[vehsAttNames['Speed']]] for x in vehsAttributes]
         Vissim.Net.Vehicles.SetMultipleAttributes(('DesSpeed', 'Speed'), vehicleNumDesiredSpeeds)
         
